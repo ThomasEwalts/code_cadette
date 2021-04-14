@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/StandardAppBar.dart';
 import 'package:code_cadette/Components/ColorClass.dart';
 import 'package:code_cadette/Components/HomeScreenButton.dart';
+import 'package:code_cadette/Pages/ExplanationScreen.dart';
 
-class Homepage extends StatefulWidget {
-  @override
-  _HomepageState createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
-  @override
+//dit is de startpagina van de applicatie
+class Homepage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: StandardAppBar(
@@ -21,8 +17,9 @@ class _HomepageState extends State<Homepage> {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.8,
           child: ListView(
+            shrinkWrap: true,
             children: [
-              HomeScreenButton(title: 'Als/dan-logica'),
+              HomeScreenButton(title: 'Als/dan-logica', destination: ExplanationScreen(title: 'Als/dan-logica', backgroundcolor: ColorClass.alsDanBackground, secondarycolor: ColorClass.alsDanSecondary, appbarcolor: ColorClass.alsDanAppBar,),),
               HomeScreenButton(title: 'Binair rekenen'),
               HomeScreenButton(title: 'Klasses')
               ],
