@@ -1,4 +1,3 @@
-import 'package:code_cadette/Pages/ExplanationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/ColorClass.dart';
 
