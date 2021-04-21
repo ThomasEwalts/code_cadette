@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 class ColorClass {
   static const mainScreenAppbar = Color(0xFF048BA8);
   static const mainScreenBackground = Color(0xFF047A94);
-  static const mainScreenButtonsecondary = Color(0xFFD6F7FE);
+  static const mainScreenSecondary = Color(0xFFD6F7FE);
 
   static const alsDanAppBar = Color(0xFF564154);
   static const alsDanBackground = Color(0xFF4C3A4A);
   static const alsDanSecondary = Color(0xFFECE6EB);
+  static const alsDanLineColor = Color(0xFF0B080B);
 }

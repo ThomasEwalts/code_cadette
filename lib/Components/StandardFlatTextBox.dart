@@ -6,20 +6,26 @@ class StandardFlatTextBox extends StatelessWidget {
   final double height;
   final double width;
 
-  StandardFlatTextBox({this.backgroundcolor, this.content, this.height, this.width});
+  StandardFlatTextBox(
+      {this.backgroundcolor,
+      this.content,
+      this.height,
+      this.width,});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
-      height: this.height,
-      width: this.width,
-      decoration: BoxDecoration(
-        color: backgroundcolor
-      ),
-      child: Text(content, style: TextStyle(
-        fontSize: 16.0, fontFamily: 'Raleway', color: Colors.black, fontWeight: FontWeight.w600)
-        )
-      );
+        padding: EdgeInsets.all(5),
+        height: this.height,
+        width: this.width,
+        decoration: BoxDecoration(
+            color: backgroundcolor,
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        child: Text(content,
+            style: TextStyle(
+                fontSize: 16.0,
+                fontFamily: 'Raleway',
+                color: Colors.black,
+                fontWeight: FontWeight.w600)));
   }
 }
