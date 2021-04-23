@@ -5,12 +5,14 @@ class StandardFlatTextBox extends StatelessWidget {
   final String content;
   final double height;
   final double width;
+  final double fontSize;
 
   StandardFlatTextBox(
       {this.backgroundcolor,
       this.content,
       this.height,
-      this.width,});
+      this.width,
+      this.fontSize = 16.0});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class StandardFlatTextBox extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Text(content,
             style: TextStyle(
-                fontSize: 16.0,
+                fontSize: fontSize,
                 fontFamily: 'Raleway',
                 color: Colors.black,
                 fontWeight: FontWeight.w600)));

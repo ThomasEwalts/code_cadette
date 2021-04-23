@@ -6,9 +6,17 @@ class LearningGoalAlsDanChoiceBox extends StatelessWidget {
   final Color backgroundColor;
   final Color lineColor;
   final int questionType;
+  final ValueSetter<String> onTextInput;
+  final TextEditingController controller;
 
   LearningGoalAlsDanChoiceBox(
-      {this.backgroundColor, this.lineColor, this.questionType});
+      {this.backgroundColor,
+      this.lineColor,
+      this.questionType,
+      this.onTextInput,
+      this.controller});
+
+  void _textInputHandler(String text) => onTextInput?.call(text);
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +111,11 @@ class LearningGoalAlsDanChoiceBox extends StatelessWidget {
 
   TableRow _kleinerGroter() {
     return TableRow(children: <Widget>[
-      Ink(child: _specificTextButton('Kleiner'), color: this.backgroundColor),
+      Ink(
+          child: _specificTextButton('Kleiner', onPressed: () {
+            _textInputHandler('<');
+          },),
+          color: this.backgroundColor),
       Ink(child: _specificTextButton('Groter'), color: this.backgroundColor),
     ]);
   }
@@ -115,7 +127,6 @@ class LearningGoalAlsDanChoiceBox extends StatelessWidget {
     ]);
   }
 
-  //SizedBox
   StandardTextButton _specificTextButton(String title, {Function onPressed}) {
     return StandardTextButton(
       title: title,

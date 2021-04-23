@@ -12,7 +12,8 @@ class Antwoord {
       'id': id,
       'vraagId': vraagId,
       'positie': positie,
-      'antwoord': antwoord
+      'antwoord': antwoord,
+      'filledIn': filledIn
     };
   }
 }

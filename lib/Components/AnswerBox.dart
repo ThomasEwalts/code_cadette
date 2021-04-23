@@ -1,22 +1,26 @@
+import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:flutter/material.dart';
-import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
+import 'package:code_cadette/Model/DatabaseModel.dart';
 
 class AnswerBox extends StatefulWidget {
   final Color backgroundcolor;
-  final List<Antwoord> antwoordList;
+  final int vraagId;
+  final TextEditingController controller;
 
-  AnswerBox({
-    this.backgroundcolor,
-    this.antwoordList
-  });
+  AnswerBox({Key key, this.backgroundcolor, this.vraagId, this.controller}) : super(key: key);
 
   @override
   _AnswerBoxState createState() => _AnswerBoxState();
 }
 
 class _AnswerBoxState extends State<AnswerBox> {
-  void initState(){
-    
+  List<Widget> widgetList = [Text('Laden...')];
+
+  @override
+  void initState() {
+    _createAnswerBoxContent(this.widget.vraagId);
+
+    super.initState();
   }
 
   @override
@@ -27,12 +31,38 @@ class _AnswerBoxState extends State<AnswerBox> {
         width: MediaQuery.of(context).size.width * 0.8,
         decoration: BoxDecoration(
             color: widget.backgroundcolor,
-            borderRadius: BorderRadius.all(Radius.circular(5))));
-    // child: Text(content,
-    //     style: TextStyle(
-    //         fontSize: 16.0,
-    //         fontFamily: 'Raleway',
-    //         color: Colors.black,
-    //         fontWeight: FontWeight.w600)));
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        child: Container(
+          child: Wrap(children: widgetList),
+          height: 50,
+        ));
+  }
+
+  _createAnswerBoxContent(int vraagIdTemp) async {
+    var databaseAnswerList = await DatabaseModel.getAntwoordList(vraagIdTemp);
+
+    List<Widget> widgetListTemp = [];
+    databaseAnswerList.sort((a, b) => a.positie.compareTo(b.positie));
+
+    databaseAnswerList.forEach((antwoord) {
+      if (antwoord.filledIn) {
+        widgetListTemp.add(StandardFlatTextBox(
+          content: antwoord.antwoord,
+          fontSize: 12.0,
+        ));
+      } else {
+        widgetListTemp.add(StandardTextField(
+          width: 50,
+          height: 20,
+          readOnly: true,
+          showCursor: true,
+          controller: this.widget.controller,
+        ));
+      }
+    });
+
+    setState(() {
+      widgetList = widgetListTemp;
+    });
   }
 }

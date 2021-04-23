@@ -1,7 +1,6 @@
 import 'package:code_cadette/Components/AnswerBox.dart';
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Components/LearningGoalAlsDanChoiceBox.dart';
-import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
 import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
@@ -11,7 +10,7 @@ class LearningGoalAlsDan extends StatefulWidget {
 
   LearningGoalAlsDan({
     Key key,
-    this.vraagId = 1,
+    this.vraagId = 2,
   }) : super(key: key);
 
   @override
@@ -21,10 +20,11 @@ class LearningGoalAlsDan extends StatefulWidget {
 class _LearningGoalAlsDanState extends State<LearningGoalAlsDan> {
   String vraagtekst = "Laden...";
   int vraagtypeKeyboard = 4;
+  TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
-    _retrieveQuestionAndAnswers(this.widget.vraagId);
+    _retrieveQuestion(this.widget.vraagId);
     super.initState();
   }
 
@@ -48,23 +48,42 @@ class _LearningGoalAlsDanState extends State<LearningGoalAlsDan> {
             height: 40,
           ),
           AnswerBox(
-            backgroundcolor: ColorClass.alsDanSecondary,
-          ),
+              backgroundcolor: ColorClass.alsDanSecondary,
+              vraagId: this.widget.vraagId,
+              controller: _controller),
           Spacer(),
           LearningGoalAlsDanChoiceBox(
               lineColor: ColorClass.alsDanLineColor,
               backgroundColor: ColorClass.alsDanSecondary,
-              questionType: vraagtypeKeyboard),
+              questionType: vraagtypeKeyboard,
+              controller: _controller,
+              onTextInput: (myText) {
+                _insertText(myText);
+              }),
         ]));
   }
 
-  _retrieveQuestionAndAnswers(int vraagId) async {
+  void _insertText(String myText) {
+    final text = _controller.text;
+    final textSelection = _controller.selection;
+    final newText = text.replaceRange(
+      textSelection.start,
+      textSelection.end,
+      myText,
+    );
+    final myTextLength = myText.length;
+    _controller.text = newText;
+    _controller.selection = textSelection.copyWith(
+      baseOffset: textSelection.start + myTextLength,
+      extentOffset: textSelection.start + myTextLength,
+    );
+  }
+
+  _retrieveQuestion(int vraagId) async {
     var questionState = await DatabaseModel.getVraag(vraagId);
-    var answerState = await DatabaseModel.getAntwoordList(vraagId);
     setState(() {
       vraagtekst = questionState.vraagtekst;
       vraagtypeKeyboard = questionState.vraagtypeKeyboard;
-      debugPrint(answerState[0].positie.toString());
     });
   }
 }

@@ -90,7 +90,8 @@ class DatabaseModel {
           id: maps[i]['id'],
           vraagId: maps[i]['vraagId'],
           positie: maps[i]['positie'],
-          antwoord: maps[i]['antwoord']);
+          antwoord: maps[i]['antwoord'].toString(),
+          filledIn: maps[i]['filledIn'] == 1 ? true : false);
     });
 
     return antwoord;
