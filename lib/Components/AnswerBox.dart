@@ -1,13 +1,14 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
+import 'package:code_cadette/Model/AnswerModel.dart';
 import 'package:flutter/material.dart';
-import 'package:code_cadette/Model/DatabaseModel.dart';
 
 class AnswerBox extends StatefulWidget {
   final Color backgroundcolor;
   final int vraagId;
-  final TextEditingController controller;
+  final AnswerModel answerModel;
 
-  AnswerBox({Key key, this.backgroundcolor, this.vraagId, this.controller}) : super(key: key);
+  AnswerBox({Key key, this.backgroundcolor, this.vraagId, this.answerModel})
+      : super(key: key);
 
   @override
   _AnswerBoxState createState() => _AnswerBoxState();
@@ -18,13 +19,12 @@ class _AnswerBoxState extends State<AnswerBox> {
 
   @override
   void initState() {
-    _createAnswerBoxContent(this.widget.vraagId);
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _createAnswerBoxContent(this.widget.vraagId);
     return Container(
         padding: EdgeInsets.all(5),
         height: 100,
@@ -38,26 +38,33 @@ class _AnswerBoxState extends State<AnswerBox> {
         ));
   }
 
-  _createAnswerBoxContent(int vraagIdTemp) async {
-    var databaseAnswerList = await DatabaseModel.getAntwoordList(vraagIdTemp);
+  _specificTextField(TextEditingController _controller) {
+    return StandardTextField(
+      width: 50,
+      height: 25,
+      readOnly: true,
+      showCursor: true,
+      controller: _controller,
+    );
+  }
 
+  _createAnswerBoxContent(int vraagIdTemp) {
+    var answerList = this.widget.answerModel.correctAntwoordList;
     List<Widget> widgetListTemp = [];
-    databaseAnswerList.sort((a, b) => a.positie.compareTo(b.positie));
+    answerList.sort((a, b) => a.positie.compareTo(b.positie));
 
-    databaseAnswerList.forEach((antwoord) {
+    answerList.forEach((antwoord) {
       if (antwoord.filledIn) {
         widgetListTemp.add(StandardFlatTextBox(
           content: antwoord.antwoord,
-          fontSize: 12.0,
+          fontSize: 20.0,
+          height: 25,
+          padding: 0,
         ));
       } else {
-        widgetListTemp.add(StandardTextField(
-          width: 50,
-          height: 20,
-          readOnly: true,
-          showCursor: true,
-          controller: this.widget.controller,
-        ));
+        var controller = new TextEditingController();
+
+        widgetListTemp.add(_specificTextField(controller));
       }
     });
 

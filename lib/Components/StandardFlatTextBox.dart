@@ -6,18 +6,20 @@ class StandardFlatTextBox extends StatelessWidget {
   final double height;
   final double width;
   final double fontSize;
+  final double padding;
 
   StandardFlatTextBox(
       {this.backgroundcolor,
       this.content,
       this.height,
       this.width,
-      this.fontSize = 16.0});
+      this.fontSize = 16.0,
+      this.padding = 5.0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(this.padding),
         height: this.height,
         width: this.width,
         decoration: BoxDecoration(
