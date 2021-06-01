@@ -2,41 +2,32 @@ import 'package:code_cadette/Components/AnswerBox.dart';
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Components/ChoiceBoxKeyboard.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
-import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:code_cadette/Model/DynamicTextFieldModel.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:provider/provider.dart';
 
-class LearningGoalAlsDan extends StatefulWidget {
+class LearningGoalAlsDan extends StatelessWidget {
   final int vraagId;
+  final AnswerModel answerModel;
+  final String vraagtekst;
+  final int vraagtypekeyboard;
 
   LearningGoalAlsDan({
     Key key,
     this.vraagId = 2,
+    this.answerModel,
+    this.vraagtekst,
+    this.vraagtypekeyboard
   }) : super(key: key);
 
-  @override
-  _LearningGoalAlsDanState createState() => _LearningGoalAlsDanState();
-}
-
-class _LearningGoalAlsDanState extends State<LearningGoalAlsDan> {
-  String vraagtekst = "Laden...";
-  int vraagtypeKeyboard = 4;
-  AnswerModel answerModel = new AnswerModel(correctAntwoordList: [], antwoordList: [] );
-
-  @override
-  void initState() {
-    _retrieveQuestion(this.widget.vraagId);
-    _retrieveAnswers(this.widget.vraagId);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => DynamicTextFieldModel()),
+        ChangeNotifierProvider(create: (context) => AnswerModel())
       ],
       child: Scaffold(
           appBar: StandardAppBar(
@@ -57,37 +48,21 @@ class _LearningGoalAlsDanState extends State<LearningGoalAlsDan> {
             ),
             AnswerBox(
               backgroundcolor: ColorClass.alsDanSecondary,
-              vraagId: this.widget.vraagId,
+              vraagId: vraagId,
               answerModel: answerModel,
             ),
             Spacer(),
-            Consumer<DynamicTextFieldModel>(
-                builder: (context, txtController, child) {
+            Consumer2<DynamicTextFieldModel, AnswerModel>(
+                builder: (context, txtController, _answerModel, child) {
               return ChoiceBoxKeyboard(
                 lineColor: ColorClass.alsDanLineColor,
                 backgroundColor: ColorClass.alsDanSecondary,
-                questionType: vraagtypeKeyboard,
+                questionType: vraagtypekeyboard,
                 controller: txtController.textEditingController,
+                answerModel: _answerModel,
               );
             }),
           ])),
     );
-  }
-
-  _retrieveAnswers(int vraagId) async {
-    AnswerModel _answerModel = new AnswerModel();
-    _answerModel.correctAntwoordList =
-        await DatabaseModel.getAntwoordList(vraagId);
-    setState(() {
-      answerModel = _answerModel;
-    });
-  }
-
-  _retrieveQuestion(int vraagId) async {
-    var questionState = await DatabaseModel.getVraag(vraagId);
-    setState(() {
-      vraagtekst = questionState.vraagtekst;
-      vraagtypeKeyboard = questionState.vraagtypeKeyboard;
-    });
   }
 }

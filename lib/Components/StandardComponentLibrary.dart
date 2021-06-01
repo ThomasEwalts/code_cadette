@@ -1,6 +1,7 @@
 library standard_component_library;
 
-export 'StandardAppBar.dart';
-export 'StandardFlatTextBox.dart';
-export 'StandardTextButton.dart';
-export 'StandardTextField.dart';
+export 'StandardComponents/StandardAppBar.dart';
+export 'StandardComponents/StandardFlatTextBox.dart';
+export 'StandardComponents/StandardTextButton.dart';
+export 'StandardComponents/StandardTextField.dart';
+export 'StandardComponents/StandardIconButton.dart';

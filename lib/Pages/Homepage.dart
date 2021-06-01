@@ -1,3 +1,4 @@
+import 'package:code_cadette/Pages/ContentControlScreen.dart';
 import 'package:code_cadette/Pages/LearningGoalAlsDan.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
@@ -32,7 +33,7 @@ class Homepage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LearningGoalAlsDan()));
+                            builder: (context) => ContentControlScreen()));
                   },
                 ),
               ),

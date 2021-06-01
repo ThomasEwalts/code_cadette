@@ -1,4 +1,5 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
+import 'package:code_cadette/Model/AnswerModel.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/numericKeyboard.dart';
@@ -9,6 +10,7 @@ class ChoiceBoxKeyboard extends StatefulWidget {
   final int questionType;
   final TextEditingController controller;
   final Color numPadColor;
+  final AnswerModel answerModel;
   final Function enterOnPressed;
 
   ChoiceBoxKeyboard(
@@ -17,6 +19,7 @@ class ChoiceBoxKeyboard extends StatefulWidget {
       this.questionType,
       this.controller,
       this.numPadColor = Colors.white,
+      this.answerModel,
       this.enterOnPressed});
 
   @override
@@ -269,7 +272,8 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
     return TableRow(
       children: [
         Ink(
-          child: _specificTextButton('Delete', onPressed: () {
+          child:
+              _specificIconButton(Icon(Icons.backspace_sharp), onPressed: () {
             _backspace();
           }),
           decoration: BoxDecoration(
@@ -277,7 +281,9 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
           ),
         ),
         Ink(
-          child: _specificTextButton('Enter Antwoord', onPressed: this.widget.enterOnPressed),
+          child: _specificIconButton(Icon(Icons.check), onPressed: () {
+            debugPrint(this.widget.answerModel.checkAnswers().toString());
+          }),
           decoration: BoxDecoration(
             color: this.widget.backgroundColor,
           ),
@@ -291,6 +297,15 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
       title: title,
       textColor: Colors.black,
       textSize: 16.0,
+      onPressed: onPressed,
+      splashColor: ColorClass.alsDanBackground,
+      height: 40,
+    );
+  }
+
+  StandardIconButton _specificIconButton(Icon icon, {Function onPressed}) {
+    return StandardIconButton(
+      icon: icon,
       onPressed: onPressed,
       splashColor: ColorClass.alsDanBackground,
       height: 40,

@@ -1,6 +1,9 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
+import 'package:code_cadette/Components/DynamicTextField.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
+import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AnswerBox extends StatefulWidget {
   final Color backgroundcolor;
@@ -24,7 +27,14 @@ class _AnswerBoxState extends State<AnswerBox> {
 
   @override
   Widget build(BuildContext context) {
-    _createAnswerBoxContent(this.widget.vraagId);
+    var _answerModel = context.watch<AnswerModel>();
+    Provider.of<AnswerModel>(context, listen: false);
+
+    _answerModel.initializeCorrectAntwoordList(
+        this.widget.answerModel.correctAntwoordList);
+    _answerModel.initializeAntwoordList(this.widget.answerModel.antwoordList);
+    _createAnswerBoxContent(_answerModel);
+
     return Container(
         padding: EdgeInsets.all(5),
         height: 100,
@@ -38,8 +48,8 @@ class _AnswerBoxState extends State<AnswerBox> {
         ));
   }
 
-  _specificTextField(TextEditingController _controller) {
-    return StandardTextField(
+  _specificTextField(TextEditingController _controller, Antwoord _antwoord) {
+    return DynamicTextField(
       width: 50,
       height: 25,
       readOnly: true,
@@ -48,10 +58,12 @@ class _AnswerBoxState extends State<AnswerBox> {
     );
   }
 
-  _createAnswerBoxContent(int vraagIdTemp) {
-    var answerList = this.widget.answerModel.correctAntwoordList;
+  _createAnswerBoxContent(AnswerModel answerModel) {
+    var answerList = answerModel.antwoordList;
     List<Widget> widgetListTemp = [];
     answerList.sort((a, b) => a.positie.compareTo(b.positie));
+
+
 
     answerList.forEach((antwoord) {
       if (antwoord.filledIn) {
@@ -63,13 +75,16 @@ class _AnswerBoxState extends State<AnswerBox> {
         ));
       } else {
         var controller = new TextEditingController();
-
-        widgetListTemp.add(_specificTextField(controller));
+        controller.addListener(() {
+          antwoord.antwoord = controller.text;
+          debugPrint(antwoord.antwoord);
+          answerModel.antwoordList[antwoord.positie - 1].antwoord = antwoord.antwoord;
+        });
+        widgetListTemp.add(_specificTextField(controller, antwoord));
       }
+
     });
 
-    setState(() {
-      widgetList = widgetListTemp;
-    });
+    widgetList = widgetListTemp;
   }
 }

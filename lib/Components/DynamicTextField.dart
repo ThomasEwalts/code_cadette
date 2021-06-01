@@ -1,8 +1,9 @@
+import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Model/DynamicTextFieldModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StandardTextField extends StatefulWidget {
+class DynamicTextField extends StatefulWidget {
   final double height;
   final double width;
   final bool readOnly;
@@ -11,7 +12,7 @@ class StandardTextField extends StatefulWidget {
   final double fontSize;
   final int maxLength;
 
-  StandardTextField(
+  DynamicTextField(
       {this.height,
       this.width,
       this.readOnly = false,
@@ -21,10 +22,10 @@ class StandardTextField extends StatefulWidget {
       this.maxLength});
 
   @override
-  _StandardTextFieldState createState() => _StandardTextFieldState();
+  _DynamicTextFieldState createState() => _DynamicTextFieldState();
 }
 
-class _StandardTextFieldState extends State<StandardTextField> {
+class _DynamicTextFieldState extends State<DynamicTextField> {
   FocusNode _focus = FocusNode();
 
   @override
@@ -46,23 +47,15 @@ class _StandardTextFieldState extends State<StandardTextField> {
       }
     });
 
-    return Container(
-        padding: EdgeInsets.only(top: 15),
-        height: this.widget.height,
-        width: this.widget.width,
-        child: Container(
-          width: 100,
-          child: TextField(
-              focusNode: _focus,
-              controller: this.widget.controller,
-              readOnly: widget.readOnly,
-              showCursor: widget.showCursor,
-              maxLength: this.widget.maxLength,
-              style: TextStyle(
-                  fontSize: this.widget.fontSize,
-                  fontFamily: 'Raleway',
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600)),
-        ));
+    return StandardTextField(
+      height: this.widget.height,
+      width: this.widget.width,
+      readOnly: this.widget.readOnly,
+      showCursor: this.widget.showCursor,
+      controller: this.widget.controller,
+      fontSize: this.widget.fontSize,
+      maxLength: this.widget.maxLength,
+      focusnode: _focus,
+    );
   }
 }
