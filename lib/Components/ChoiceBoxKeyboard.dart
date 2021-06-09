@@ -1,5 +1,6 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
+import 'package:code_cadette/Pages/VerifyScreen.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/numericKeyboard.dart';
@@ -282,7 +283,14 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
         ),
         Ink(
           child: _specificIconButton(Icon(Icons.check), onPressed: () {
-            debugPrint(this.widget.answerModel.checkAnswers().toString());
+            bool verify = this.widget.answerModel.checkAnswers();
+
+            if(verify){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyScreen(verify)));
+            }
+            else{
+              Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyScreen(verify)));
+            }
           }),
           decoration: BoxDecoration(
             color: this.widget.backgroundColor,

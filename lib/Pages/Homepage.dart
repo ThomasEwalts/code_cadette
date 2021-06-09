@@ -1,5 +1,4 @@
 import 'package:code_cadette/Pages/ContentControlScreen.dart';
-import 'package:code_cadette/Pages/LearningGoalAlsDan.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
