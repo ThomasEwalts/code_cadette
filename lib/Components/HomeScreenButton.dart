@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:code_cadette/Components/ColorClass.dart';
+import 'package:code_cadette/Themes/ColorClass.dart';
 
 //Deze bevat de homescreen button voor de verschillende leerdoelen
 class HomeScreenButton extends StatelessWidget {
@@ -23,7 +23,7 @@ class HomeScreenButton extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.2,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                  color: ColorClass.mainScreenButtonsecondary,
+                  color: ColorClass.mainScreenSecondary,
                   borderRadius: BorderRadius.all(Radius.circular(10.0))),
               child: Center(
                   child: Text(
