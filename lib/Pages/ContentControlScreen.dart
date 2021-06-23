@@ -7,11 +7,10 @@ import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
 
 class ContentControlScreen extends StatefulWidget {
   final int vraagId;
+  final int leerDoel;
 
-  ContentControlScreen({
-    Key key,
-    this.vraagId = 2,
-  }) : super(key: key);
+  ContentControlScreen({Key key, this.vraagId = 2, this.leerDoel})
+      : super(key: key);
 
   @override
   _ContentControlScreenState createState() => _ContentControlScreenState();
@@ -22,6 +21,7 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
   AnswerModel answerModel;
   String vraagtekst;
   int vraagtypeKeyboard;
+  List<Vraag> vraaglistLeerdoel;
 
   @override
   void initState() {
@@ -33,13 +33,24 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return loaded
-        ? LearningGoalAlsDan(
-            answerModel: answerModel,
-            vraagtekst: vraagtekst,
-            vraagtypekeyboard: vraagtypeKeyboard,
-          )
-        : LoadingScreen();
+    return loaded ? _learningGoal(this.widget.leerDoel) : LoadingScreen();
+  }
+
+  _retrieveVraagList(int leerdoel) async {
+    List<Vraag> _vraaglistLeerdoel;
+
+    _vraaglistLeerdoel = await DatabaseModel.getVraagListForLeerdoel(leerdoel);
+
+    return _vraaglistLeerdoel;
+  }
+
+  _learningGoal(int leerdoel) {
+    return LearningGoalAlsDan(
+      answerModel: answerModel,
+      vraagtekst: vraagtekst,
+      vraagtypekeyboard: vraagtypeKeyboard,
+      leerDoel: leerdoel,
+    );
   }
 
   _retrieveAnswers(int vraagId) async {

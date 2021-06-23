@@ -32,11 +32,26 @@ class Homepage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ContentControlScreen()));
+                            builder: (context) => ContentControlScreen(leerDoel: 1,)));
                   },
                 ),
               ),
-              HomeScreenButton(title: 'Binair rekenen'),
+              HomeScreenButton(
+                title: 'Binair rekenen',
+                destination: ExplanationScreen(
+                  title: 'Binair',
+                  leerdoel: 2,
+                  backgroundcolor: ColorClass.binairBackground,
+                  secondarycolor: ColorClass.binairSecondary,
+                  appbarcolor: ColorClass.binairAppBarr,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ContentControlScreen(leerDoel: 2,)));
+                  },
+                ),
+              ),
             ],
           ),
         )));

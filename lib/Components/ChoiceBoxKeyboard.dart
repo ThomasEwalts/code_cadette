@@ -285,11 +285,16 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
           child: _specificIconButton(Icon(Icons.check), onPressed: () {
             bool verify = this.widget.answerModel.checkAnswers();
 
-            if(verify){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyScreen(verify)));
-            }
-            else{
-              Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyScreen(verify)));
+            if (verify) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => VerifyScreen(verify)));
+            } else {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => VerifyScreen(verify)));
             }
           }),
           decoration: BoxDecoration(

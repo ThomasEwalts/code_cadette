@@ -10,4 +10,9 @@ class ColorClass {
   static const alsDanBackground = Color(0xFF4C3A4A);
   static const alsDanSecondary = Color(0xFFECE6EB);
   static const alsDanLineColor = Color(0xFF0B080B);
+
+  static const binairAppBarr = Color(0xFFE0CBA8);
+  static const binairBackground = Color(0xFFD3B585);
+  static const binairSecondary = Color(0xFFFBF8F4);
+  static const binairLineColor = Color(0xFF241B0D);
 }
