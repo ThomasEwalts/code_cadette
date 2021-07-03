@@ -5,11 +5,11 @@ class Leerdoel {
 
   Leerdoel({this.id, this.name, this.explanation});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'explanation': explanation,
-    };
-  }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'id': id,
+  //     'name': name,
+  //     'explanation': explanation,
+  //   };
+  // }
 }

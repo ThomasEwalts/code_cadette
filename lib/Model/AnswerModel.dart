@@ -26,10 +26,6 @@ class AnswerModel extends ChangeNotifier {
     _antwoordList = initAntwoordList;
   }
 
-  void ping() {
-    notifyListeners();
-  }
-
   bool checkAnswers() {
     bool correct = true;
 

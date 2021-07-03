@@ -74,9 +74,15 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
   }
 
   _retrieveExplanation(int leerdoel) async {
-    var leerdoelState = await DatabaseModel.getLeerDoel(leerdoel);
-    setState(() {
-      leerdoelExplanation = leerdoelState.explanation;
-    });
+    try {
+      var leerdoelState = await DatabaseModel.getLeerDoel(leerdoel);
+      setState(() {
+        leerdoelExplanation = leerdoelState.explanation;
+      });
+    } catch (NoSuchMethod) {
+      setState(() {
+        leerdoelExplanation = "Database connection error. Please contact the developer";
+      });
+    }
   }
 }

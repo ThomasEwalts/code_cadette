@@ -7,6 +7,8 @@ import 'package:code_cadette/Pages/ExplanationScreen.dart';
 
 //dit is de startpagina van de applicatie
 class Homepage extends StatelessWidget {
+  static const navigateToExplanationKey = Key('navigateToExplanation');
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: StandardAppBar(
@@ -21,6 +23,7 @@ class Homepage extends StatelessWidget {
             shrinkWrap: true,
             children: [
               HomeScreenButton(
+                key: navigateToExplanationKey,
                 title: 'Als/dan-logica',
                 destination: ExplanationScreen(
                   title: 'Als/dan-logica',
@@ -32,11 +35,30 @@ class Homepage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ContentControlScreen()));
+                            builder: (context) => ContentControlScreen(
+                                  leerDoel: 1,
+                                )));
                   },
                 ),
               ),
-              HomeScreenButton(title: 'Binair rekenen'),
+              HomeScreenButton(
+                title: 'Binair rekenen',
+                destination: ExplanationScreen(
+                  title: 'Binair',
+                  leerdoel: 2,
+                  backgroundcolor: ColorClass.binairBackground,
+                  secondarycolor: ColorClass.binairSecondary,
+                  appbarcolor: ColorClass.binairAppBarr,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ContentControlScreen(
+                                  leerDoel: 2,
+                                )));
+                  },
+                ),
+              ),
             ],
           ),
         )));
