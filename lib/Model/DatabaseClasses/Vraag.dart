@@ -6,12 +6,12 @@ class Vraag {
 
   Vraag({this.id, this.leerdoelId, this.vraagtypeKeyboard, this.vraagtekst});
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'leerdoelId': leerdoelId,
-      'vraagtypeKeyboard': vraagtypeKeyboard,
-      'vraagtekst': vraagtekst
-    };
-  }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'id': id,
+  //     'leerdoelId': leerdoelId,
+  //     'vraagtypeKeyboard': vraagtypeKeyboard,
+  //     'vraagtekst': vraagtekst
+  //   };
+  // }
 }

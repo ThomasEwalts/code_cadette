@@ -28,7 +28,6 @@ class _AnswerBoxState extends State<AnswerBox> {
   @override
   Widget build(BuildContext context) {
     var _answerModel = context.watch<AnswerModel>();
-    Provider.of<AnswerModel>(context, listen: false);
 
     _answerModel.initializeCorrectAntwoordList(
         this.widget.answerModel.correctAntwoordList);
@@ -61,29 +60,32 @@ class _AnswerBoxState extends State<AnswerBox> {
   _createAnswerBoxContent(AnswerModel answerModel) {
     var answerList = answerModel.antwoordList;
     List<Widget> widgetListTemp = [];
-    answerList.sort((a, b) => a.positie.compareTo(b.positie));
 
+    try {
+      answerList.sort((a, b) => a.positie.compareTo(b.positie));
 
-
-    answerList.forEach((antwoord) {
-      if (antwoord.filledIn) {
-        widgetListTemp.add(StandardFlatTextBox(
-          content: antwoord.antwoord,
-          fontSize: 20.0,
-          height: 25,
-          padding: 0,
-        ));
-      } else {
-        var controller = new TextEditingController();
-        controller.addListener(() {
-          antwoord.antwoord = controller.text;
-          debugPrint(antwoord.antwoord);
-          answerModel.antwoordList[antwoord.positie - 1].antwoord = antwoord.antwoord;
-        });
-        widgetListTemp.add(_specificTextField(controller, antwoord));
-      }
-
-    });
+      answerList.forEach((antwoord) {
+        if (antwoord.filledIn) {
+          widgetListTemp.add(StandardFlatTextBox(
+            content: antwoord.antwoord,
+            fontSize: 20.0,
+            height: 25,
+            padding: 0,
+          ));
+        } else {
+          var controller = new TextEditingController();
+          controller.addListener(() {
+            antwoord.antwoord = controller.text;
+            debugPrint(antwoord.antwoord);
+            answerModel.antwoordList[antwoord.positie - 1].antwoord =
+                antwoord.antwoord;
+          });
+          widgetListTemp.add(_specificTextField(controller, antwoord));
+        }
+      });
+    } catch (NoSuchMethod) {
+      widgetListTemp = [Text('ERROR')];
+    }
 
     widgetList = widgetListTemp;
   }

@@ -4,12 +4,14 @@ import 'package:code_cadette/Themes/ColorClass.dart';
 //Deze bevat de homescreen button voor de verschillende leerdoelen
 class HomeScreenButton extends StatelessWidget {
   final String title;
-  final Widget destination; //linkt de juiste page
+  final Widget destination;
+  final Key key; //linkt de juiste page
 
-  HomeScreenButton({this.title, this.destination});
+  HomeScreenButton({this.title, this.destination, this.key});
   @override
   Widget build(BuildContext context) {
     return InkWell(
+        key: key,
         onTap: () {
           Navigator.push(
               context,

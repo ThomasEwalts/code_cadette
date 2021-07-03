@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:provider/provider.dart';
 
-class LearningGoalAlsDan extends StatelessWidget {
+class GameScreen extends StatelessWidget {
   final int vraagId;
   final AnswerModel answerModel;
   final String vraagtekst;
   final int vraagtypekeyboard;
   final int leerDoel;
 
-  LearningGoalAlsDan(
+  GameScreen(
       {Key key,
       this.vraagId = 2,
       this.answerModel,

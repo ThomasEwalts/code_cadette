@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
@@ -75,18 +76,22 @@ class DatabaseModel {
   static Future<List<Vraag>> getVraagListForLeerdoel(int id) async {
     Database db = await openDatabase(_path);
 
+    debugPrint(id.toString());
+
     final List<Map<String, dynamic>> maps =
         await db.query('Vraag', where: "leerdoelId = $id");
 
     db.close();
 
-    return List.generate(maps.length, (i) {
+    List<Vraag> vragen = List.generate(maps.length, (i) {
       return Vraag(
           id: maps[i]['id'],
           leerdoelId: maps[i]['leerdoelId'],
           vraagtypeKeyboard: maps[i]['vraagtypeKeyboard'],
           vraagtekst: maps[i]['vraagtekst']);
     });
+
+    return vragen;
   }
 
   static Future<List<Antwoord>> getAntwoordList(int id) async {
