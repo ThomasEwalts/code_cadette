@@ -1,6 +1,5 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
-import 'package:code_cadette/Pages/VerifyScreen.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/numericKeyboard.dart';
@@ -12,7 +11,8 @@ class ChoiceBoxKeyboard extends StatefulWidget {
   final TextEditingController controller;
   final Color numPadColor;
   final AnswerModel answerModel;
-  final Function enterOnPressed;
+  final Function enterOnPressedTrue;
+  final Function enterOnPressedFalse;
 
   ChoiceBoxKeyboard(
       {this.backgroundColor,
@@ -21,7 +21,8 @@ class ChoiceBoxKeyboard extends StatefulWidget {
       this.controller,
       this.numPadColor = Colors.white,
       this.answerModel,
-      this.enterOnPressed});
+      this.enterOnPressedTrue,
+      this.enterOnPressedFalse});
 
   @override
   _ChoiceBoxKeyboardState createState() => _ChoiceBoxKeyboardState();
@@ -43,8 +44,8 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
     _insertText(myText);
   }
 
-  showHideNumPad(bool futureState) {
-    if (futureState) {
+  showHideNumPad(bool numpadState) {
+    if (numpadState) {
       setState(() {
         numPadVisible = true;
       });
@@ -178,6 +179,24 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
           );
         }
         break;
+      case 4:
+      {
+        return Column(
+          children: [
+            Table(
+              border: TableBorder(
+                  verticalInside:
+                      BorderSide(width: 1, color: this.widget.lineColor),
+                  horizontalInside:
+                      BorderSide(width: 1, color: this.widget.lineColor)),
+              children: <TableRow>[
+                _binair(context),
+                _backspaceEnterButton(context)
+              ],
+            ),
+          ],
+        );
+      }
       default:
         {
           return Column(
@@ -214,6 +233,25 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
       rightIcon: Icon(Icons.backspace_rounded,
           color: this.widget.numPadColor, size: 30),
       rightButtonFn: () => _backspace(),
+    );
+  }
+
+  TableRow _binair(BuildContext context) {
+    return TableRow(
+      children: <Widget>[
+        Ink(
+            child: _specificTextButton('0', 
+              onPressed: () {
+              _textInputHandler('0');
+        }),
+        color: this.widget.backgroundColor),
+       Ink(
+            child: _specificTextButton('1', 
+              onPressed: () {
+              _textInputHandler('1');
+        }),
+        color: this.widget.backgroundColor)        
+      ],
     );
   }
 
@@ -286,15 +324,9 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
             bool verify = this.widget.answerModel.checkAnswers();
 
             if (verify) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => VerifyScreen(verify)));
+              this.widget.enterOnPressedTrue.call();
             } else {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => VerifyScreen(verify)));
+              this.widget.enterOnPressedFalse.call();
             }
           }),
           decoration: BoxDecoration(

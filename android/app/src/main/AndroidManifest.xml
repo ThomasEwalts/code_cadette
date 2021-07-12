@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.code_cadette">
    <application
-        android:label="code_cadette"
+        android:label="CodeCadette"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

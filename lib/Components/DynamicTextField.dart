@@ -56,6 +56,7 @@ class _DynamicTextFieldState extends State<DynamicTextField> {
       fontSize: this.widget.fontSize,
       maxLength: this.widget.maxLength,
       focusnode: _focus,
+      centered: true,
     );
   }
 }

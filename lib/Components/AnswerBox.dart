@@ -76,7 +76,6 @@ class _AnswerBoxState extends State<AnswerBox> {
           var controller = new TextEditingController();
           controller.addListener(() {
             antwoord.antwoord = controller.text;
-            debugPrint(antwoord.antwoord);
             answerModel.antwoordList[antwoord.positie - 1].antwoord =
                 antwoord.antwoord;
           });

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
@@ -13,7 +12,7 @@ class DatabaseModel {
   DatabaseModel._privateConstructor();
   static final DatabaseModel instance = DatabaseModel._privateConstructor();
 
-  static Future<void> setDatabase() async {
+  static Future<bool> setDatabase() async {
     _databasesPath = await getDatabasesPath();
     _path = join(_databasesPath, "code_cadette_database.db");
 
@@ -37,7 +36,11 @@ class DatabaseModel {
 
       // Write and flush the bytes written
       await File(_path).writeAsBytes(bytes, flush: true);
+
+      return true;
     }
+
+    return true;
   }
 
   static Future<Leerdoel> getLeerDoel(int id) async {
@@ -76,8 +79,6 @@ class DatabaseModel {
   static Future<List<Vraag>> getVraagListForLeerdoel(int id) async {
     Database db = await openDatabase(_path);
 
-    debugPrint(id.toString());
-
     final List<Map<String, dynamic>> maps =
         await db.query('Vraag', where: "leerdoelId = $id");
 
@@ -112,5 +113,86 @@ class DatabaseModel {
     });
 
     return antwoord;
+  }
+
+  static Future<AppData> getAppData() async {
+    Database db = await openDatabase(_path);
+    final List<Map<String, dynamic>> maps = await db.query('AppData');
+
+    db.close();
+
+    AppData appData = AppData(
+        currentUser: maps[0]['currentUser'],
+        firstStartUp: maps[0]['firstStartUp'] == 1 ? true : false);
+
+    return appData;
+  }
+
+  static Future<void> setFirstStartUp(bool setValue) async {
+    Database db = await openDatabase(_path);
+    await db.update('AppData', {'firstStartUp': setValue});
+  }
+
+  static Future<void> setCurrentUser(int id) async {
+    Database db = await openDatabase(_path);
+    await db.update('AppData', {'currentUser': id});
+  }
+
+  static Future<void> createUser(User user) async {
+    Database db = await openDatabase(_path);
+
+    await db.insert('User', user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  static Future<User> getUser(int id) async {
+    Database db = await openDatabase(_path);
+
+    final List<Map<String, dynamic>> maps =
+        await db.query('User', where: "id = $id");
+
+    db.close();
+
+    User user = User(
+        id: maps[0]['id'],
+        name: maps[0]['name'],
+        alsDanPosition: maps[0]['alsDanPosition'],
+        binairPosition: maps[0]['binairPosition'],
+        alsDanPercentage: maps[0]['alsDanPercentage'],
+        binairPercentage: maps[0]['binairPercentage']);
+
+    return user;
+  }
+
+  static Future<User> getCurrentUser() async {
+    Database db = await openDatabase(_path);
+
+    final List<Map<String, dynamic>> appDataMaps = await db.query('AppData');
+
+    AppData appData = AppData(
+        currentUser: appDataMaps[0]['currentUser'],
+        firstStartUp: appDataMaps[0]['firstStartup']);
+
+    final List<Map<String, dynamic>> userMap =
+        await db.query('User', where: "id = ${appData.currentUser}");
+
+    db.close();
+
+    User user = User(
+        id: userMap[0]['id'],
+        name: userMap[0]['name'],
+        alsDanPosition: userMap[0]['alsDanPosition'],
+        binairPosition: userMap[0]['binairPosition'],
+        alsDanPercentage: userMap[0]['alsDanPercentage'],
+        binairPercentage: userMap[0]['binairPercentage']);
+
+    return user;
+  }
+
+  static Future<void> updateUser(User user) async {
+    Database db = await openDatabase(_path);
+
+    await db
+        .update('User', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
   }
 }

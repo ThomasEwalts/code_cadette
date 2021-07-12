@@ -7,13 +7,15 @@ class StandardAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Color color;
   final bool showBackButton;
+  final bool showSettings;
 
-  StandardAppBar({Key key, 
-  this.title, 
-  this.color,
-  this.showBackButton = true,
-  })
-      : preferredSize = Size.fromHeight(50.0),
+  StandardAppBar({
+    Key key,
+    this.title,
+    this.color,
+    this.showBackButton = true,
+    this.showSettings = false,
+  })  : preferredSize = Size.fromHeight(50.0),
         super(key: key);
 
   @override
@@ -29,9 +31,9 @@ class _StandardAppBarState extends State<StandardAppBar> {
           style: TextStyle(fontFamily: 'NickelodeonNF', fontSize: 35.0)),
       centerTitle: true,
       automaticallyImplyLeading: widget.showBackButton,
-      actions: <Widget>[
-        IconButton(onPressed: null, icon: Icon(Icons.settings))
-      ],
+      actions: this.widget.showSettings ? <Widget>[
+        IconButton(onPressed: null, icon: Icon(Icons.settings)) 
+      ] : null,
     );
   }
 }

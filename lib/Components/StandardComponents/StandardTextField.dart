@@ -7,9 +7,12 @@ class StandardTextField extends StatefulWidget {
   final bool showCursor;
   final TextEditingController controller;
   final double fontSize;
+  final Color fontColor;
+  final Color cursorColor;
   final int maxLength;
   final FocusNode focusnode;
   final Function onchanged;
+  final bool centered;
 
   StandardTextField(
       {this.height,
@@ -18,9 +21,12 @@ class StandardTextField extends StatefulWidget {
       this.showCursor = true,
       this.controller,
       this.fontSize = 16.0,
+      this.fontColor = Colors.black,
+      this.cursorColor = Colors.black,
       this.maxLength,
       this.focusnode,
-      this.onchanged});
+      this.onchanged,
+      this.centered = false});
 
   @override
   _StandardTextFieldState createState() => _StandardTextFieldState();
@@ -43,6 +49,14 @@ class _StandardTextFieldState extends State<StandardTextField> {
         child: Container(
           width: 100,
           child: TextField(
+              cursorColor: this.widget.cursorColor,
+              decoration: InputDecoration(
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white))),
+              textAlign:
+                  this.widget.centered ? TextAlign.center : TextAlign.left,
               onChanged: this.widget.onchanged,
               focusNode: this.widget.focusnode,
               controller: this.widget.controller,
@@ -52,7 +66,7 @@ class _StandardTextFieldState extends State<StandardTextField> {
               style: TextStyle(
                   fontSize: this.widget.fontSize,
                   fontFamily: 'Raleway',
-                  color: Colors.black,
+                  color: this.widget.fontColor,
                   fontWeight: FontWeight.w600)),
         ));
   }

@@ -12,7 +12,9 @@ class GameScreen extends StatelessWidget {
   final AnswerModel answerModel;
   final String vraagtekst;
   final int vraagtypekeyboard;
-  final int leerDoel;
+  final int leerdoelId;
+  final Function enterOnPressedTrue;
+  final Function enterOnPressedFalse;
 
   GameScreen(
       {Key key,
@@ -20,7 +22,9 @@ class GameScreen extends StatelessWidget {
       this.answerModel,
       this.vraagtekst,
       this.vraagtypekeyboard,
-      this.leerDoel})
+      this.leerdoelId,
+      this.enterOnPressedTrue,
+      this.enterOnPressedFalse})
       : super(key: key);
 
   @override
@@ -30,7 +34,7 @@ class GameScreen extends StatelessWidget {
     Color secondaryColor;
     Color linecolorColor;
 
-    switch (leerDoel) {
+    switch (leerdoelId) {
       case 1:
         {
           appBarColor = ColorClass.alsDanAppBar;
@@ -55,8 +59,7 @@ class GameScreen extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AnswerModel())
       ],
       child: Scaffold(
-          appBar: StandardAppBar(
-              color: appBarColor, title: 'Als/dan-logica'),
+          appBar: StandardAppBar(color: appBarColor, title: 'Als/dan-logica'),
           backgroundColor: backgroundColor,
           body: Column(children: [
             SizedBox(
@@ -85,6 +88,8 @@ class GameScreen extends StatelessWidget {
                 questionType: vraagtypekeyboard,
                 controller: txtController.textEditingController,
                 answerModel: _answerModel,
+                enterOnPressedTrue: enterOnPressedTrue,
+                enterOnPressedFalse: enterOnPressedFalse,
               );
             }),
           ])),
