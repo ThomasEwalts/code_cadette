@@ -16,7 +16,7 @@ class LoadingScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [CircularProgressIndicator(), Text("Loading")],
+          children: [CircularProgressIndicator(color: Colors.white,), Text("Loading", style: TextStyle(color: Colors.white),)],
         ),
       ),
     );

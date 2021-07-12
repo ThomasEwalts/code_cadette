@@ -14,6 +14,7 @@ class Homepage extends StatelessWidget {
         appBar: StandardAppBar(
           color: ColorClass.mainScreenAppbar,
           title: 'CodeCadette',
+          showSettings: true,
         ),
         backgroundColor: ColorClass.mainScreenBackground,
         body: Center(
@@ -32,11 +33,11 @@ class Homepage extends StatelessWidget {
                   secondarycolor: ColorClass.alsDanSecondary,
                   appbarcolor: ColorClass.alsDanAppBar,
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ContentControlScreen(
-                                  leerDoel: 1,
+                                  leerdoelId: 1,
                                 )));
                   },
                 ),
@@ -50,11 +51,11 @@ class Homepage extends StatelessWidget {
                   secondarycolor: ColorClass.binairSecondary,
                   appbarcolor: ColorClass.binairAppBarr,
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => ContentControlScreen(
-                                  leerDoel: 2,
+                                  leerdoelId: 2,
                                 )));
                   },
                 ),

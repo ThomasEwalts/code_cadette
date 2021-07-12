@@ -32,7 +32,7 @@ void main() {
                         tester.element(find.byType(Scaffold)),
                         MaterialPageRoute(
                             builder: (context) => ContentControlScreen(
-                                  leerDoel: 1,
+                                  leerdoelId: 1,
                                 )));
                   },),
         navigatorObservers: [mockObserver],

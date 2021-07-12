@@ -32,7 +32,6 @@ class AnswerModel extends ChangeNotifier {
     _correctAntwoordList.forEach((correctAnswer) {
       if (!(correctAnswer.antwoord ==
           _antwoordList[correctAnswer.positie - 1].antwoord)) {
-        debugPrint(_antwoordList[correctAnswer.positie - 1].antwoord);
         correct = false;
       }
     });
