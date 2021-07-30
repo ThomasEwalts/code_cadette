@@ -11,8 +11,8 @@ class ChoiceBoxKeyboard extends StatefulWidget {
   final TextEditingController controller;
   final Color numPadColor;
   final AnswerModel answerModel;
-  final Function enterOnPressedTrue;
-  final Function enterOnPressedFalse;
+  final VoidCallback enterOnPressedTrue;
+  final VoidCallback enterOnPressedFalse;
 
   ChoiceBoxKeyboard(
       {this.backgroundColor,
@@ -180,23 +180,23 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
         }
         break;
       case 4:
-      {
-        return Column(
-          children: [
-            Table(
-              border: TableBorder(
-                  verticalInside:
-                      BorderSide(width: 1, color: this.widget.lineColor),
-                  horizontalInside:
-                      BorderSide(width: 1, color: this.widget.lineColor)),
-              children: <TableRow>[
-                _binair(context),
-                _backspaceEnterButton(context)
-              ],
-            ),
-          ],
-        );
-      }
+        {
+          return Column(
+            children: [
+              Table(
+                border: TableBorder(
+                    verticalInside:
+                        BorderSide(width: 1, color: this.widget.lineColor),
+                    horizontalInside:
+                        BorderSide(width: 1, color: this.widget.lineColor)),
+                children: <TableRow>[
+                  _binair(context),
+                  _backspaceEnterButton(context)
+                ],
+              ),
+            ],
+          );
+        }
       default:
         {
           return Column(
@@ -240,17 +240,15 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
     return TableRow(
       children: <Widget>[
         Ink(
-            child: _specificTextButton('0', 
-              onPressed: () {
+            child: _specificTextButton('0', onPressed: () {
               _textInputHandler('0');
-        }),
-        color: this.widget.backgroundColor),
-       Ink(
-            child: _specificTextButton('1', 
-              onPressed: () {
+            }),
+            color: this.widget.backgroundColor),
+        Ink(
+            child: _specificTextButton('1', onPressed: () {
               _textInputHandler('1');
-        }),
-        color: this.widget.backgroundColor)        
+            }),
+            color: this.widget.backgroundColor)
       ],
     );
   }
@@ -324,9 +322,9 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
             bool verify = this.widget.answerModel.checkAnswers();
 
             if (verify) {
-              this.widget.enterOnPressedTrue.call();
+              this.widget.enterOnPressedTrue();
             } else {
-              this.widget.enterOnPressedFalse.call();
+              this.widget.enterOnPressedFalse();
             }
           }),
           decoration: BoxDecoration(

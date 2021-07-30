@@ -127,21 +127,19 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
       vraagtekst: vraagtekst,
       vraagtypekeyboard: vraagtypeKeyboard,
       leerdoelId: leerdoel,
-      enterOnPressedTrue: _verifyTrue(),
-      enterOnPressedFalse: _verifyFalse(),
+      enterOnPressedTrue: _verifyTrue,
+      enterOnPressedFalse: _verifyFalse,
     );
   }
 
-  Function _verifyFalse() {
-    return () {
-      setState(() {
-        gameState = 2;
-        verify = false;
-      });
-    };
+  _verifyFalse() {
+    setState(() {
+      gameState = 2;
+      verify = false;
+    });
   }
 
-  Function _verifyTrue() {
+  _verifyTrue() {
     if (vraagListPosition < vraagListLengthAdjusted) {
       switch (this.widget.leerdoelId) {
         case 1:
@@ -152,18 +150,14 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
           break;
       }
       DatabaseModel.updateUser(user);
-      return () {
-        setState(() {
-          gameState = 2;
-          verify = true;
-        });
-      };
+      setState(() {
+        gameState = 2;
+        verify = true;
+      });
     } else {
-      return () {
-        setState(() {
-          gameState = 3;
-        });
-      };
+      setState(() {
+        gameState = 3;
+      });
     }
   }
 
