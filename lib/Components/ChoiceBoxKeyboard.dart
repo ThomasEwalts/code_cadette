@@ -1,6 +1,7 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/numericKeyboard.dart';
 
@@ -33,6 +34,10 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
 
   @override
   Widget build(BuildContext context) {
+    if (!(this.widget.controller == null)) {
+      debugPrint(this.widget.controller.value.toString());
+    }
+
     if (!numPadVisible) {
       return choiceBox();
     } else {
@@ -59,59 +64,74 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
   void _textInputHandler(String text) => onTextInput?.call(text);
 
   void _insertText(String myText) {
-    final text = this.widget.controller.text;
-    final textSelection = this.widget.controller.selection;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-
-    final myTextLength = myText.length;
-    this.widget.controller.text = newText;
-    this.widget.controller.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
-  }
-
-  void _backspace() {
-    final text = this.widget.controller.text;
-    final textSelection = this.widget.controller.selection;
-    final selectionLength = textSelection.end - textSelection.start;
-    // There is a selection.
-    if (selectionLength > 0) {
+    if (kIsWeb) {
+      this.widget.controller.text = this.widget.controller.text + myText;
+    } else {
+      final text = this.widget.controller.text;
+      final textSelection = this.widget.controller.selection;
       final newText = text.replaceRange(
         textSelection.start,
         textSelection.end,
+        myText,
+      );
+
+      final myTextLength = myText.length;
+      this.widget.controller.text = newText;
+      this.widget.controller.selection = textSelection.copyWith(
+        baseOffset: textSelection.start + myTextLength,
+        extentOffset: textSelection.start + myTextLength,
+      );
+    }
+  }
+
+  void _backspace() {
+    if (kIsWeb) {
+      this.widget.controller.text = this
+          .widget
+          .controller
+          .text
+          .substring(0, this.widget.controller.text.length - 1);
+    } else {
+      final text = this.widget.controller.text;
+      final textSelection = this.widget.controller.selection;
+      final selectionLength = textSelection.end - textSelection.start;
+
+      debugPrint(this.widget.controller.selection.toString());
+      // There is a selection.
+      if (selectionLength > 0) {
+        debugPrint('a selection is selected');
+        final newText = text.replaceRange(
+          textSelection.start,
+          textSelection.end,
+          '',
+        );
+        this.widget.controller.text = newText;
+        this.widget.controller.selection = textSelection.copyWith(
+          baseOffset: textSelection.start,
+          extentOffset: textSelection.start,
+        );
+        return;
+      }
+      // The cursor is at the beginning.
+      if (textSelection.start == 0) {
+        return;
+      }
+      // Delete the previous character
+      final previousCodeUnit = text.codeUnitAt(textSelection.start - 1);
+      final offset = _isUtf16Surrogate(previousCodeUnit) ? 2 : 1;
+      final newStart = textSelection.start - offset;
+      final newEnd = textSelection.start;
+      final newText = text.replaceRange(
+        newStart,
+        newEnd,
         '',
       );
       this.widget.controller.text = newText;
       this.widget.controller.selection = textSelection.copyWith(
-        baseOffset: textSelection.start,
-        extentOffset: textSelection.start,
+        baseOffset: newStart,
+        extentOffset: newStart,
       );
-      return;
     }
-    // The cursor is at the beginning.
-    if (textSelection.start == 0) {
-      return;
-    }
-    // Delete the previous character
-    final previousCodeUnit = text.codeUnitAt(textSelection.start - 1);
-    final offset = _isUtf16Surrogate(previousCodeUnit) ? 2 : 1;
-    final newStart = textSelection.start - offset;
-    final newEnd = textSelection.start;
-    final newText = text.replaceRange(
-      newStart,
-      newEnd,
-      '',
-    );
-    this.widget.controller.text = newText;
-    this.widget.controller.selection = textSelection.copyWith(
-      baseOffset: newStart,
-      extentOffset: newStart,
-    );
   }
 
   bool _isUtf16Surrogate(int value) {
@@ -352,6 +372,7 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
       onPressed: onPressed,
       splashColor: ColorClass.alsDanBackground,
       height: 40,
+      canRequestFocus: false,
     );
   }
 }

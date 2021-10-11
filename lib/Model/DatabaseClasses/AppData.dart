@@ -1,8 +1,9 @@
 class AppData {
   bool firstStartUp;
-  int currentUser;
+  String currentUser;
+  String iD;
 
-  AppData({this.firstStartUp, this.currentUser});
+  AppData({this.firstStartUp, this.currentUser, this.iD});
 
   Map<String, dynamic> toMap() {
     return {'firstStartUp': firstStartUp, 'currentUser': currentUser};

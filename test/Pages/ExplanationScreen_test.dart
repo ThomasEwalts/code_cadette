@@ -1,5 +1,5 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
-import 'package:code_cadette/Pages/ContentControlScreen.dart';
+import 'package:code_cadette/Controller/ControllerContent.dart';
 import 'package:code_cadette/Pages/ExplanationScreen.dart';
 import 'package:code_cadette/Pages/GameScreen.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ void main() {
                     Navigator.push(
                         tester.element(find.byType(Scaffold)),
                         MaterialPageRoute(
-                            builder: (context) => ContentControlScreen(
+                            builder: (context) => ControllerContent(
                                   leerdoelId: 1,
                                 )));
                   },),
