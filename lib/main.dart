@@ -2,12 +2,8 @@ import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:code_cadette/Pages/IntroPage.dart';
 import 'package:code_cadette/Pages/LoadingScreen.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 //Dit is het entrypoint van de applicatie
 void main() {

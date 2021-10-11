@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:code_cadette/Model/DatabaseModel.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
-import 'package:flutter/material.dart';
 
 class FirebaseDatabaseModel implements DatabaseModel {
   static FirebaseFirestore _instance;
