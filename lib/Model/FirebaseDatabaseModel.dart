@@ -23,7 +23,6 @@ class FirebaseDatabaseModel implements DatabaseModel {
 
       _userAppData = list[0].id;
       _userId = list[0]['currentUser'];
-      debugPrint(_userAppData);
     } catch (e) {
       await _createAppData(AppData());
     }
@@ -93,7 +92,6 @@ class FirebaseDatabaseModel implements DatabaseModel {
   }
 
   Future<AppData> getAppData() async {
-    debugPrint(_userAppData);
     var maps = await _instance
         .collection('AppData')
         .doc(_userAppData)
@@ -179,7 +177,6 @@ class FirebaseDatabaseModel implements DatabaseModel {
         .add({'firstStartUp': true, 'currentUser': ''});
 
     _userAppData = _appDataDoc.id;
-    debugPrint(_userAppData);
   }
 }
 
