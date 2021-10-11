@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseDatabaseModel implements DatabaseModel {
   static FirebaseFirestore _instance;
@@ -112,16 +113,16 @@ class FirebaseDatabaseModel implements DatabaseModel {
     await _instance
         .collection('AppData')
         .doc(_userAppData)
-        .update({'currentUser': id});
+        .update({'currentUser': _userId});
   }
 
   Future<void> createUser(User user) async {
     var newDoc = await _instance.collection('User').add({
       'name': user.name,
-      'alsDanPosition': user.alsDanPosition,
-      'binairPosition': user.binairPosition,
-      'alsDanPercentage': user.alsDanPercentage,
-      'binairPercentage': user.binairPercentage
+      'alsDanPosition': 0,
+      'binairPosition': 0,
+      'alsDanPercentage': 0,
+      'binairPercentage': 0
     });
 
     await _instance
