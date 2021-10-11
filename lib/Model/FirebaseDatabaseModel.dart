@@ -13,7 +13,7 @@ class FirebaseDatabaseModel implements DatabaseModel {
 
   Future<bool> setDatabase() async {
     _instance = FirebaseFirestore.instance;
-    _instance.settings = Settings(persistenceEnabled: true);
+    _instance.enablePersistence(PersistenceSettings(synchronizeTabs: true));
 
     try {
       var maps = await _instance
@@ -23,8 +23,9 @@ class FirebaseDatabaseModel implements DatabaseModel {
 
       _userAppData = list[0].id;
       _userId = list[0]['currentUser'];
+      debugPrint(_userAppData);
     } catch (e) {
-      _createAppData(AppData());
+      await _createAppData(AppData());
     }
     return true;
   }
@@ -92,13 +93,14 @@ class FirebaseDatabaseModel implements DatabaseModel {
   }
 
   Future<AppData> getAppData() async {
-    var maps = await _instance.collection('AppData').get();
-
-    var list = maps.docs;
+    debugPrint(_userAppData);
+    var maps = await _instance
+        .collection('AppData')
+        .doc(_userAppData)
+        .get(GetOptions(source: Source.cache));
 
     AppData appData = AppData(
-        currentUser: list[0]['currentUser'],
-        firstStartUp: list[0]['firstStartUp']);
+        currentUser: maps['currentUser'], firstStartUp: maps['firstStartUp']);
 
     return appData;
   }
@@ -125,6 +127,11 @@ class FirebaseDatabaseModel implements DatabaseModel {
       'alsDanPercentage': user.alsDanPercentage,
       'binairPercentage': user.binairPercentage
     });
+
+    await _instance
+        .collection('AppData')
+        .doc(_userAppData)
+        .update({'currentUser': newDoc.id});
 
     _userId = newDoc.id;
   }
@@ -167,12 +174,12 @@ class FirebaseDatabaseModel implements DatabaseModel {
   }
 
   Future<void> _createAppData(AppData appData) async {
-    _userAppData = UniqueKey().toString();
-
-    await _instance
+    var _appDataDoc = await _instance
         .collection('AppData')
-        .doc(_userAppData)
-        .set({'firstStartUp': true});
+        .add({'firstStartUp': true, 'currentUser': ''});
+
+    _userAppData = _appDataDoc.id;
+    debugPrint(_userAppData);
   }
 }
 

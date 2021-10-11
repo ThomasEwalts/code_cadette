@@ -24,21 +24,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _initialized = false;
-  bool _error = false;
 
   void initializeDatabase() async {
-    if (kIsWeb) {
-      //await Firebase.initializeApp();
-      await DatabaseModel().setDatabase();
-      setState(() {
-        _initialized = true;
-      });
-    } else {
-      await DatabaseModel().setDatabase();
-      setState(() {
-        _initialized = true;
-      });
-    }
+    await DatabaseModel().setDatabase();
+    setState(() {
+      _initialized = true;
+    });
   }
 
   @override
@@ -49,7 +40,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     if (!_initialized) {
       return MaterialApp(
           title: 'CodeCadette',
