@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'Homepage.dart';
 
 class IntroPage extends StatefulWidget {
+  final DatabaseModel db = DatabaseModel();
   IntroPage({
     Key key,
   }) : super(key: key);
@@ -85,7 +86,7 @@ class _IntroPageState extends State<IntroPage> {
 
   _retrieveAppData() async {
     AppData _appData;
-    _appData = await DatabaseModel.getAppData();
+    _appData = await this.widget.db.getAppData();
     if (mounted) {
       setState(() {
         appData = _appData;
@@ -94,11 +95,11 @@ class _IntroPageState extends State<IntroPage> {
     }
   }
 
-  _buttonOnPressedFunction(BuildContext context, String name) {
-    debugPrint(name);
-    DatabaseModel.createUser(new User(name: name));
-    DatabaseModel.setCurrentUser(1);
-    DatabaseModel.setFirstStartUp(false);
+  _buttonOnPressedFunction(BuildContext context, String name) async {
+    var uid = UniqueKey().toString();
+    await this.widget.db.createUser(new User(id: uid, name: name));
+    await this.widget.db.setCurrentUser(uid);
+    await this.widget.db.setFirstStartUp(false);
     Navigator.pushReplacement(
         (context), MaterialPageRoute(builder: (context) => Homepage()));
   }

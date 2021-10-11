@@ -54,6 +54,7 @@ class _AnswerBoxState extends State<AnswerBox> {
       readOnly: true,
       showCursor: true,
       controller: _controller,
+      
     );
   }
 
@@ -82,7 +83,7 @@ class _AnswerBoxState extends State<AnswerBox> {
           widgetListTemp.add(_specificTextField(controller, antwoord));
         }
       });
-    } catch (NoSuchMethod) {
+    } catch (noSuchMethodError) {
       widgetListTemp = [Text('ERROR')];
     }
 

@@ -1,5 +1,5 @@
 class User {
-  int id;
+  String id;
   String name;
   int alsDanPosition;
   int binairPosition;
@@ -16,7 +16,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': id.toString(),
       'name': name,
       'alsDanPosition': alsDanPosition,
       'binairPosition': binairPosition,

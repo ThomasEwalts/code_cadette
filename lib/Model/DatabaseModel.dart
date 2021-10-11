@@ -1,198 +1,34 @@
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'dart:io';
+import 'DatabaseModelStub.dart'
+    // ignore: uri_does_not_exist
+    if (dart.library.io) 'package:code_cadette/Model/SQLiteDatabaseModel.dart'
+    // ignore: uri_does_not_exist
+    if (dart.library.html) 'package:code_cadette/Model/FirebaseDatabaseModel.dart';
 
-class DatabaseModel {
-  static var _path;
-  static var _databasesPath;
+abstract class DatabaseModel {
+  factory DatabaseModel() => getDatabaseModel();
 
-  DatabaseModel._privateConstructor();
-  static final DatabaseModel instance = DatabaseModel._privateConstructor();
+  Future<bool> setDatabase();
 
-  static Future<bool> setDatabase() async {
-    _databasesPath = await getDatabasesPath();
-    _path = join(_databasesPath, "code_cadette_database.db");
+  Future<Leerdoel> getLeerDoel(int id);
 
-    // Check if the database exists
-    var exists = await databaseExists(_path);
+  Future<Vraag> getVraag(int id);
 
-    if (!exists) {
-      // Should happen only the first time you launch your application
-      print("Creating new copy from asset");
+  Future<List<Vraag>> getVraagListForLeerdoel(int id);
 
-      // Make sure the parent directory exists
-      try {
-        await Directory(dirname(_path)).create(recursive: true);
-      } catch (_) {}
+  Future<List<Antwoord>> getAntwoordList(int id);
 
-      // Copy from asset
-      ByteData data = await rootBundle
-          .load(join("assets", "database", "code_cadette_database.db"));
-      List<int> bytes =
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  Future<AppData> getAppData();
 
-      // Write and flush the bytes written
-      await File(_path).writeAsBytes(bytes, flush: true);
+  Future<void> setFirstStartUp(bool setValue);
 
-      return true;
-    }
+  Future<void> setCurrentUser(String id);
 
-    return true;
-  }
+  Future<void> createUser(User user);
 
-  static Future<Leerdoel> getLeerDoel(int id) async {
-    Database db = await openDatabase(_path);
+  Future<User> getUser(String id);
 
-    final List<Map<String, dynamic>> maps =
-        await db.query('Leerdoel', where: "id = $id");
+  Future<User> getCurrentUser();
 
-    db.close();
-
-    Leerdoel leerdoel = Leerdoel(
-        id: maps[0]['id'],
-        name: maps[0]['name'],
-        explanation: maps[0]['explanation']);
-
-    return leerdoel;
-  }
-
-  static Future<Vraag> getVraag(int id) async {
-    Database db = await openDatabase(_path);
-
-    final List<Map<String, dynamic>> maps =
-        await db.query('Vraag', where: "id = $id");
-
-    db.close();
-
-    Vraag vraag = Vraag(
-        id: maps[0]['id'],
-        leerdoelId: maps[0]['leerdoelId'],
-        vraagtypeKeyboard: maps[0]['vraagtypeKeyboard'],
-        vraagtekst: maps[0]['vraagtekst']);
-
-    return vraag;
-  }
-
-  static Future<List<Vraag>> getVraagListForLeerdoel(int id) async {
-    Database db = await openDatabase(_path);
-
-    final List<Map<String, dynamic>> maps =
-        await db.query('Vraag', where: "leerdoelId = $id");
-
-    db.close();
-
-    List<Vraag> vragen = List.generate(maps.length, (i) {
-      return Vraag(
-          id: maps[i]['id'],
-          leerdoelId: maps[i]['leerdoelId'],
-          vraagtypeKeyboard: maps[i]['vraagtypeKeyboard'],
-          vraagtekst: maps[i]['vraagtekst']);
-    });
-
-    return vragen;
-  }
-
-  static Future<List<Antwoord>> getAntwoordList(int id) async {
-    Database db = await openDatabase(_path);
-
-    final List<Map<String, dynamic>> maps =
-        await db.query('Antwoord', where: "vraagId = $id");
-
-    db.close();
-
-    List<Antwoord> antwoord = List.generate(maps.length, (i) {
-      return Antwoord(
-          id: maps[i]['id'],
-          vraagId: maps[i]['vraagId'],
-          positie: maps[i]['positie'],
-          antwoord: maps[i]['antwoord'].toString(),
-          filledIn: maps[i]['filledIn'] == 1 ? true : false);
-    });
-
-    return antwoord;
-  }
-
-  static Future<AppData> getAppData() async {
-    Database db = await openDatabase(_path);
-    final List<Map<String, dynamic>> maps = await db.query('AppData');
-
-    db.close();
-
-    AppData appData = AppData(
-        currentUser: maps[0]['currentUser'],
-        firstStartUp: maps[0]['firstStartUp'] == 1 ? true : false);
-
-    return appData;
-  }
-
-  static Future<void> setFirstStartUp(bool setValue) async {
-    Database db = await openDatabase(_path);
-    await db.update('AppData', {'firstStartUp': setValue});
-  }
-
-  static Future<void> setCurrentUser(int id) async {
-    Database db = await openDatabase(_path);
-    await db.update('AppData', {'currentUser': id});
-  }
-
-  static Future<void> createUser(User user) async {
-    Database db = await openDatabase(_path);
-
-    await db.insert('User', user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-  static Future<User> getUser(int id) async {
-    Database db = await openDatabase(_path);
-
-    final List<Map<String, dynamic>> maps =
-        await db.query('User', where: "id = $id");
-
-    db.close();
-
-    User user = User(
-        id: maps[0]['id'],
-        name: maps[0]['name'],
-        alsDanPosition: maps[0]['alsDanPosition'],
-        binairPosition: maps[0]['binairPosition'],
-        alsDanPercentage: maps[0]['alsDanPercentage'],
-        binairPercentage: maps[0]['binairPercentage']);
-
-    return user;
-  }
-
-  static Future<User> getCurrentUser() async {
-    Database db = await openDatabase(_path);
-
-    final List<Map<String, dynamic>> appDataMaps = await db.query('AppData');
-
-    AppData appData = AppData(
-        currentUser: appDataMaps[0]['currentUser'],
-        firstStartUp: appDataMaps[0]['firstStartup']);
-
-    final List<Map<String, dynamic>> userMap =
-        await db.query('User', where: "id = ${appData.currentUser}");
-
-    db.close();
-
-    User user = User(
-        id: userMap[0]['id'],
-        name: userMap[0]['name'],
-        alsDanPosition: userMap[0]['alsDanPosition'],
-        binairPosition: userMap[0]['binairPosition'],
-        alsDanPercentage: userMap[0]['alsDanPercentage'],
-        binairPercentage: userMap[0]['binairPercentage']);
-
-    return user;
-  }
-
-  static Future<void> updateUser(User user) async {
-    Database db = await openDatabase(_path);
-
-    await db
-        .update('User', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
-  }
+  Future<void> updateUser(User user);
 }

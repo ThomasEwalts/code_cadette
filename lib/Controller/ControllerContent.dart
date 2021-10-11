@@ -1,25 +1,25 @@
+import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:code_cadette/Pages/GameScreen.dart';
 import 'package:code_cadette/Pages/LearningGoalCompletedScreen.dart';
 import 'package:code_cadette/Pages/LoadingScreen.dart';
 import 'package:code_cadette/Pages/VerifyScreen.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
 import 'package:flutter/material.dart';
-import 'package:code_cadette/Model/DatabaseModel.dart';
 import 'package:code_cadette/Model/AnswerModel.dart';
 import 'package:code_cadette/Model/DatabaseClasses/DatabaseClassLibrary.dart';
 
-class ContentControlScreen extends StatefulWidget {
+class ControllerContent extends StatefulWidget {
   final int vraagId;
   final int leerdoelId;
+  final DatabaseModel db = DatabaseModel();
 
-  ContentControlScreen({Key key, this.vraagId, this.leerdoelId})
-      : super(key: key);
+  ControllerContent({Key key, this.vraagId, this.leerdoelId}) : super(key: key);
 
   @override
-  _ContentControlScreenState createState() => _ContentControlScreenState();
+  _ControllerContentState createState() => _ControllerContentState();
 }
 
-class _ContentControlScreenState extends State<ContentControlScreen> {
+class _ControllerContentState extends State<ControllerContent> {
   AnswerModel answerModel;
   User user;
   String vraagtekst;
@@ -103,8 +103,7 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
   }
 
   _initializeUserVraagAntwoord() async {
-    var _user = new User();
-    _user = await DatabaseModel.getCurrentUser();
+    User _user = await this.widget.db.getCurrentUser();
     user = _user;
 
     switch (this.widget.leerdoelId) {
@@ -127,21 +126,19 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
       vraagtekst: vraagtekst,
       vraagtypekeyboard: vraagtypeKeyboard,
       leerdoelId: leerdoel,
-      enterOnPressedTrue: _verifyTrue(),
-      enterOnPressedFalse: _verifyFalse(),
+      enterOnPressedTrue: _verifyTrue,
+      enterOnPressedFalse: _verifyFalse,
     );
   }
 
-  Function _verifyFalse() {
-    return () {
-      setState(() {
-        gameState = 2;
-        verify = false;
-      });
-    };
+  _verifyFalse() {
+    setState(() {
+      gameState = 2;
+      verify = false;
+    });
   }
 
-  Function _verifyTrue() {
+  _verifyTrue() {
     if (vraagListPosition < vraagListLengthAdjusted) {
       switch (this.widget.leerdoelId) {
         case 1:
@@ -151,30 +148,24 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
           user.binairPosition++;
           break;
       }
-      DatabaseModel.updateUser(user);
-      return () {
-        setState(() {
-          gameState = 2;
-          verify = true;
-        });
-      };
+      this.widget.db.updateUser(user);
+      setState(() {
+        gameState = 2;
+        verify = true;
+      });
     } else {
-      return () {
-        setState(() {
-          gameState = 3;
-        });
-      };
+      setState(() {
+        gameState = 3;
+      });
     }
   }
 
   _retrieveVraagList(int leerdoel) async {
     List<Vraag> _vraaglistLeerdoel;
-    _vraaglistLeerdoel = await DatabaseModel.getVraagListForLeerdoel(leerdoel);
+    _vraaglistLeerdoel = await this.widget.db.getVraagListForLeerdoel(leerdoel);
     vraagListLengthAdjusted = _vraaglistLeerdoel.length - 1;
 
     vraaglistLeerdoel = _vraaglistLeerdoel;
-
-    debugPrint(vraagListPosition.toString());
 
     _retrieveAnswers(vraaglistLeerdoel[vraagListPosition].id);
   }
@@ -184,9 +175,9 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
       AnswerModel _answerModel = new AnswerModel();
 
       _answerModel.correctAntwoordList =
-          await DatabaseModel.getAntwoordList(vraagId);
+          await this.widget.db.getAntwoordList(vraagId);
 
-      var questionState = await DatabaseModel.getVraag(vraagId);
+      var questionState = await this.widget.db.getVraag(vraagId);
 
       _answerModel.antwoordList = [];
 
@@ -205,7 +196,7 @@ class _ContentControlScreenState extends State<ContentControlScreen> {
         vraagtypeKeyboard = questionState.vraagtypeKeyboard;
         gameState = 1;
       });
-    } catch (NoSuchMethod) {
+    } catch (noSuchMethod) {
       setState(() {
         vraagtekst =
             'A database error has ocurred, please contact the developer';

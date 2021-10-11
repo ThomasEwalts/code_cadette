@@ -1,4 +1,4 @@
-import 'package:code_cadette/Pages/ContentControlScreen.dart';
+import 'package:code_cadette/Controller/ControllerContent.dart';
 import 'package:flutter/material.dart';
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
 import 'package:code_cadette/Themes/ColorClass.dart';
@@ -36,7 +36,7 @@ class Homepage extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ContentControlScreen(
+                            builder: (context) => ControllerContent(
                                   leerdoelId: 1,
                                 )));
                   },
@@ -54,7 +54,7 @@ class Homepage extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ContentControlScreen(
+                            builder: (context) => ControllerContent(
                                   leerdoelId: 2,
                                 )));
                   },

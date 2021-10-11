@@ -1,6 +1,6 @@
 import 'package:code_cadette/Components/StandardComponentLibrary.dart';
-import 'package:flutter/material.dart';
 import 'package:code_cadette/Model/DatabaseModel.dart';
+import 'package:flutter/material.dart';
 
 //deze class bevat het screen tussen het hoofdmenu en de leerdoelen, waarin uitleg wordt gegeven over het leerdoel, de uitleg wordt uit de SQLite database gehaald
 class ExplanationScreen extends StatefulWidget {
@@ -10,6 +10,7 @@ class ExplanationScreen extends StatefulWidget {
   final Color appbarcolor;
   final Function onPressed;
   final int leerdoel;
+  final DatabaseModel db = DatabaseModel();
 
   ExplanationScreen(
       {Key key,
@@ -75,13 +76,14 @@ class _ExplanationScreenState extends State<ExplanationScreen> {
 
   _retrieveExplanation(int leerdoel) async {
     try {
-      var leerdoelState = await DatabaseModel.getLeerDoel(leerdoel);
+      var leerdoelState = await this.widget.db.getLeerDoel(leerdoel);
       setState(() {
         leerdoelExplanation = leerdoelState.explanation;
       });
-    } catch (NoSuchMethod) {
+    } catch (noSuchMethod) {
       setState(() {
-        leerdoelExplanation = "Database connection error. Please contact the developer";
+        leerdoelExplanation =
+            "Database connection error. Please contact the developer";
       });
     }
   }
