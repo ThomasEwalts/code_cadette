@@ -167,8 +167,6 @@ class _ControllerContentState extends State<ControllerContent> {
 
     vraaglistLeerdoel = _vraaglistLeerdoel;
 
-    debugPrint(vraagListPosition.toString());
-
     _retrieveAnswers(vraaglistLeerdoel[vraagListPosition].id);
   }
 

@@ -34,10 +34,6 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
 
   @override
   Widget build(BuildContext context) {
-    if (!(this.widget.controller == null)) {
-      debugPrint(this.widget.controller.value.toString());
-    }
-
     if (!numPadVisible) {
       return choiceBox();
     } else {
@@ -96,10 +92,8 @@ class _ChoiceBoxKeyboardState extends State<ChoiceBoxKeyboard> {
       final textSelection = this.widget.controller.selection;
       final selectionLength = textSelection.end - textSelection.start;
 
-      debugPrint(this.widget.controller.selection.toString());
       // There is a selection.
       if (selectionLength > 0) {
-        debugPrint('a selection is selected');
         final newText = text.replaceRange(
           textSelection.start,
           textSelection.end,
